@@ -154,7 +154,7 @@ section {
 }
 
 .hero__tagline {
-  font-family: 'Windsong', cursive;
+  font-family: 'WindSong', cursive;
   font-style: italic;
   font-size: clamp(28px, 6vw, 50px);
   line-height: 1.35;
@@ -351,7 +351,7 @@ section {
 
 .countdown__row--vertical .countdown__label {
   margin-top: 0;
-  font-family: 'Windsong', cursive;
+  font-family: 'WindSong', cursive;
   font-style: italic;
   font-weight: normal;
   text-transform: none;
@@ -386,7 +386,7 @@ section {
 }
 
 .tagline-callout p {
-  font-family: 'Windsong', cursive;
+  font-family: 'WindSong', cursive;
   font-style: italic;
   margin: 0;
   opacity: 0;
@@ -524,7 +524,7 @@ section {
 }
 
 .transition-section p {
-  font-family: 'Windsong', cursive;
+  font-family: 'WindSong', cursive;
   font-style: italic;
   font-size: clamp(24px, 5vw, 36px);
   color: var(--grad-cream);
@@ -627,7 +627,7 @@ section {
 .rsvp__heading-right { width: clamp(40px, 10vw, 78px); height: auto; }
 
 .rsvp__eyebrow {
-  font-family: 'Windsong', cursive;
+  font-family: 'WindSong', cursive;
   font-style: italic;
   font-size: clamp(20px, 5vw, 30px);
   color: var(--text-light);
@@ -776,7 +776,7 @@ section {
 }
 
 .contact__eyebrow {
-  font-family: 'Windsong', cursive;
+  font-family: 'WindSong', cursive;
   font-style: italic;
   font-size: clamp(20px, 4.5vw, 26px);
   color: var(--text-light);
@@ -812,7 +812,7 @@ section {
 }
 
 .footer__lyric {
-  font-family: 'Windsong', cursive;
+  font-family: 'WindSong', cursive;
   font-style: italic;
   font-size: clamp(24px, 6vw, 38px);
   color: var(--text-light);

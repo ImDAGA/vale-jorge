@@ -133,6 +133,16 @@ section {
   animation: none;
 }
 
+#hero-cta {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+#hero-cta:hover,
+#hero-cta:focus-visible {
+  opacity: 0.7;
+}
+
 .hero.is-started #vinyl-spin-group {
   animation: vinylSpin 2.4s steps(8) infinite;
 }

@@ -124,6 +124,22 @@
   window.addEventListener('pointerdown', handleFirstGesture);
   window.addEventListener('click', handleFirstGesture);
 
+  // "Play (Click aquí)" CTA drawn on the turntable lid — explicit handling
+  // so it also works via keyboard (native buttons respond to Enter, and
+  // Space is already handled globally for the scroll-reveal).
+  const heroCta = document.getElementById('hero-cta');
+  if (heroCta) {
+    heroCta.addEventListener('click', () => {
+      if (!started) startExperience();
+    });
+    heroCta.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (!started) startExperience();
+      }
+    });
+  }
+
   // ---------- Pause/Play button ----------
   function updatePlayToggleIcon() {
     playIconBars.hidden = !isPlaying;

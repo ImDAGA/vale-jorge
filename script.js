@@ -114,6 +114,16 @@
   window.addEventListener('touchmove', handleTouchMove, { passive: false });
   window.addEventListener('keydown', handleKeyDown);
 
+  // Wheel/scroll isn't treated as a user-activation gesture by browser
+  // autoplay policies (unlike click/key/tap), so a mouse-wheel or trackpad
+  // scroll alone can silently fail to start audio. Catch the first
+  // qualifying gesture of any kind as a fallback so sound still starts.
+  function handleFirstGesture() {
+    if (!started) startExperience();
+  }
+  window.addEventListener('pointerdown', handleFirstGesture);
+  window.addEventListener('click', handleFirstGesture);
+
   // ---------- Pause/Play button ----------
   function updatePlayToggleIcon() {
     playIconBars.hidden = !isPlaying;

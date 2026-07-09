@@ -58,11 +58,9 @@
   function startExperience() {
     if (started) return;
     started = true;
-    isPlaying = true;
     hero.classList.add('is-started');
     audio.volume = 0.8;
     audio.play().catch(() => {});
-    updatePlayToggleIcon();
   }
 
   function bumpProgress(delta) {
@@ -148,16 +146,26 @@
 
   function togglePlay() {
     if (audio.paused) {
-      audio.play().catch(() => {});
-      isPlaying = true;
       started = true;
       hero.classList.add('is-started');
+      audio.play().catch(() => {});
     } else {
       audio.pause();
-      isPlaying = false;
     }
-    updatePlayToggleIcon();
   }
+
+  // Drive the icon off the audio element's real state, not an optimistic
+  // guess — play() can silently fail (autoplay blocked) or the file can
+  // still be buffering, and the icon should never claim it's playing
+  // when it isn't.
+  audio.addEventListener('play', () => {
+    isPlaying = true;
+    updatePlayToggleIcon();
+  });
+  audio.addEventListener('pause', () => {
+    isPlaying = false;
+    updatePlayToggleIcon();
+  });
 
   playToggle.addEventListener('click', togglePlay);
   updatePlayToggleIcon();

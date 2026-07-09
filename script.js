@@ -1,0 +1,235 @@
+(() => {
+  'use strict';
+
+  // TODO: point this at a real RSVP backend before going live — e.g. a
+  // Google Apps Script Web App URL bound to a Sheet, or a Formspree-style
+  // endpoint. Left blank for now, so submissions only show the local
+  // thank-you message and are NOT stored anywhere.
+  const RSVP_ENDPOINT = '';
+
+  const WEDDING_DATE = new Date(2026, 9, 24, 17, 0, 0).getTime();
+  const ADDRESS = 'Parque San Rafael, 30 Ruta 5 Norte, Lampa, Región Metropolitana, Chile';
+
+  const hero = document.getElementById('hero');
+  const heroTagline = document.getElementById('heroTagline');
+  const audio = document.getElementById('bgAudio');
+  const playToggle = document.getElementById('playToggle');
+  const playIconBars = document.getElementById('playIconBars');
+  const playIconPlay = document.getElementById('playIconPlay');
+  const tagline1 = document.getElementById('tagline1');
+  const tagline2 = document.getElementById('tagline2');
+
+  // ---------- Hero tagline word spans ----------
+  const TAGLINE_TEXT = "Maybe you're amazed, that we're (finally) getting married";
+  const words = TAGLINE_TEXT.split(' ');
+  const wordSpans = words.map((w) => {
+    const span = document.createElement('span');
+    span.textContent = w + ' ';
+    heroTagline.appendChild(span);
+    return span;
+  });
+
+  function renderTagline(progress) {
+    const n = words.length;
+    wordSpans.forEach((span, i) => {
+      const opacity = Math.max(0.08, Math.min(1, progress * n - i));
+      span.style.opacity = opacity;
+    });
+  }
+  renderTagline(0);
+
+  // ---------- Map / Waze links ----------
+  const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ADDRESS);
+  const wazeUrl = 'https://waze.com/ul?q=' + encodeURIComponent(ADDRESS) + '&navigate=yes';
+  document.getElementById('mapsLink').href = mapsUrl;
+  document.getElementById('wazeLink').href = wazeUrl;
+
+  // ---------- State ----------
+  let revealProgress = 0;
+  let started = false;
+  let isPlaying = false;
+  let pastHero = false;
+  let touchStartY = null;
+
+  function isLocked() {
+    return revealProgress < 1;
+  }
+
+  function startExperience() {
+    if (started) return;
+    started = true;
+    isPlaying = true;
+    hero.classList.add('is-started');
+    audio.volume = 0.8;
+    audio.play().catch(() => {});
+    updatePlayToggleIcon();
+  }
+
+  function bumpProgress(delta) {
+    const next = Math.max(0, Math.min(1, revealProgress + delta));
+    if (next !== revealProgress) {
+      revealProgress = next;
+      renderTagline(revealProgress);
+    }
+  }
+
+  function handleWheel(e) {
+    if (!isLocked()) return;
+    e.preventDefault();
+    if (!started) startExperience();
+    bumpProgress(e.deltaY / 1600);
+  }
+
+  function handleTouchStart(e) {
+    touchStartY = e.touches[0].clientY;
+  }
+
+  function handleTouchMove(e) {
+    if (!isLocked()) return;
+    e.preventDefault();
+    if (!started) startExperience();
+    const y = e.touches[0].clientY;
+    const delta = touchStartY - y;
+    touchStartY = y;
+    bumpProgress(delta / 550);
+  }
+
+  const DOWN_KEYS = ['ArrowDown', 'PageDown', ' '];
+  const UP_KEYS = ['ArrowUp', 'PageUp'];
+
+  function handleKeyDown(e) {
+    if (!isLocked()) return;
+    if (DOWN_KEYS.includes(e.key)) {
+      e.preventDefault();
+      if (!started) startExperience();
+      bumpProgress(0.07);
+    } else if (UP_KEYS.includes(e.key)) {
+      e.preventDefault();
+      bumpProgress(-0.07);
+    }
+  }
+
+  window.addEventListener('wheel', handleWheel, { passive: false });
+  window.addEventListener('touchstart', handleTouchStart, { passive: true });
+  window.addEventListener('touchmove', handleTouchMove, { passive: false });
+  window.addEventListener('keydown', handleKeyDown);
+
+  // ---------- Pause/Play button ----------
+  function updatePlayToggleIcon() {
+    playIconBars.hidden = !isPlaying;
+    playIconPlay.hidden = isPlaying;
+  }
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play().catch(() => {});
+      isPlaying = true;
+      started = true;
+      hero.classList.add('is-started');
+    } else {
+      audio.pause();
+      isPlaying = false;
+    }
+    updatePlayToggleIcon();
+  }
+
+  playToggle.addEventListener('click', togglePlay);
+  updatePlayToggleIcon();
+
+  // ---------- Secondary lyric reveal-on-scroll ----------
+  let tagline1Revealed = false;
+  let tagline2Revealed = false;
+
+  function handlePageScroll() {
+    const past = window.scrollY > window.innerHeight * 0.6;
+    if (past !== pastHero) {
+      pastHero = past;
+      playToggle.classList.toggle('is-visible', pastHero);
+    }
+
+    if (!tagline1Revealed) {
+      const rect = tagline1.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.85) {
+        tagline1Revealed = true;
+        tagline1.classList.add('is-revealed');
+      }
+    }
+
+    if (!tagline2Revealed) {
+      const rect2 = tagline2.getBoundingClientRect();
+      if (rect2.top < window.innerHeight * 0.85) {
+        tagline2Revealed = true;
+        tagline2.classList.add('is-revealed');
+      }
+    }
+  }
+
+  window.addEventListener('scroll', handlePageScroll, { passive: true });
+  handlePageScroll();
+  setTimeout(handlePageScroll, 300);
+
+  // ---------- Countdown timer ----------
+  function pad(n) {
+    return String(Math.max(0, n)).padStart(2, '0');
+  }
+
+  const cdDays = document.getElementById('cdDays');
+  const cdHours = document.getElementById('cdHours');
+  const cdMinutes = document.getElementById('cdMinutes');
+  const cdSeconds = document.getElementById('cdSeconds');
+
+  function tickCountdown() {
+    const diff = Math.max(0, WEDDING_DATE - Date.now());
+    cdDays.textContent = pad(Math.floor(diff / 86400000));
+    cdHours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+    cdMinutes.textContent = pad(Math.floor((diff % 3600000) / 60000));
+    cdSeconds.textContent = pad(Math.floor((diff % 60000) / 1000));
+  }
+
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+  // ---------- RSVP form ----------
+  const rsvpForm = document.getElementById('rsvpForm');
+  const rsvpThanks = document.getElementById('rsvpThanks');
+  const attendYesBtn = document.getElementById('attendYes');
+  const attendNoBtn = document.getElementById('attendNo');
+  let attending = null;
+
+  function setAttending(value) {
+    attending = value;
+    attendYesBtn.classList.toggle('is-active', attending === 'si');
+    attendNoBtn.classList.toggle('is-active', attending === 'no');
+  }
+
+  attendYesBtn.addEventListener('click', () => setAttending('si'));
+  attendNoBtn.addEventListener('click', () => setAttending('no'));
+
+  rsvpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById('rsvpName').value,
+      companion: document.getElementById('rsvpCompanion').value,
+      attending,
+      dietary: document.getElementById('rsvpDietary').value,
+    };
+
+    if (RSVP_ENDPOINT) {
+      try {
+        await fetch(RSVP_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } catch (err) {
+        console.error('RSVP submission failed', err);
+      }
+    } else {
+      console.warn('RSVP_ENDPOINT is not configured — response was not saved anywhere.', payload);
+    }
+
+    rsvpForm.hidden = true;
+    rsvpThanks.hidden = false;
+  });
+})();

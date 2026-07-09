@@ -1,0 +1,898 @@
+/* Vale & Jorge — Wedding Invitation
+   Palette: "Sage" (the only theme shipped in the design reference) */
+
+:root {
+  --cream: #f1ecdf;
+  --grad-cream: #efebde;
+  --grad-sage: #89906c;
+  --grad-dark: #394335;
+  --pale-sage: #d7dabe;
+  --ink: #4b4636;
+  --section-1: #a8ae87;
+  --section-2: #8f9770;
+  --section-3: #7a8360;
+  --olive-tag: #6c7554;
+  --olive-rsvp-1: #5c6548;
+  --olive-rsvp-2: #48503a;
+  --dark-olive: #333a27;
+  --near-black: #23281b;
+  --text-light: #f3efe2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: 'Spectral', serif;
+  overflow-x: hidden;
+  background: var(--grad-cream);
+  position: relative;
+}
+
+img {
+  max-width: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(8deg); }
+}
+
+@keyframes vinylSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes discoFlip {
+  0%, 24% { transform: scaleX(1); }
+  25%, 49% { transform: scaleX(-1); }
+  50%, 74% { transform: scaleX(1); }
+  75%, 99% { transform: scaleX(-1); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes carDrive {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-1px, -2px) rotate(-0.4deg); }
+  50% { transform: translate(1px, 0) rotate(0.3deg); }
+  75% { transform: translate(-1px, -1px) rotate(-0.2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* ---------- Page shell ---------- */
+
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.page__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--grad-cream) 0%,
+    var(--grad-cream) 32%,
+    var(--grad-sage) 50%,
+    var(--grad-dark) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+section {
+  box-sizing: border-box;
+  padding-left: clamp(20px, 5vw, 32px);
+  padding-right: clamp(20px, 5vw, 32px);
+  text-align: center;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero__illustration {
+  width: min(420px, 68vw);
+  height: auto;
+  margin: 0 auto 40px;
+  display: block;
+  fill: var(--ink);
+}
+
+#vinyl-spin-group {
+  transform-origin: 0px 0px;
+  animation: none;
+}
+
+.hero.is-started #vinyl-spin-group {
+  animation: vinylSpin 2.4s steps(8) infinite;
+}
+
+.hero__tagline-wrap {
+  overflow: hidden;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.hero__tagline {
+  font-family: 'Windsong', cursive;
+  font-style: italic;
+  font-size: clamp(28px, 6vw, 50px);
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 0;
+  padding: 0 8px;
+}
+
+.hero__tagline span {
+  transition: opacity 0.2s ease;
+}
+
+/* ---------- Wordmark ---------- */
+
+.wordmark {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+  padding-bottom: 34px;
+  position: relative;
+}
+
+.wordmark__bleed {
+  position: absolute;
+  height: auto;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.wordmark__bleed--left {
+  width: min(190px, 30vw);
+  left: -48px;
+  top: 30%;
+  transform: translateY(-50%);
+}
+
+.wordmark__bleed--right {
+  width: min(200px, 32vw);
+  right: -52px;
+  top: 70%;
+  transform: translateY(-50%);
+}
+
+.wordmark__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.wordmark__stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(50px, 18vw, 130px);
+}
+
+.wordmark__stars img {
+  animation: twinkle var(--twinkle-duration, 2.6s) ease-in-out infinite;
+  animation-delay: var(--twinkle-delay, 0s);
+}
+
+.wordmark__logo {
+  width: min(600px, 70vw);
+  height: auto;
+}
+
+@media (max-width: 700px) {
+  .wordmark__bleed--left {
+    width: 70px;
+    left: -30px;
+  }
+
+  .wordmark__bleed--right {
+    width: 74px;
+    right: -32px;
+  }
+
+  .hero {
+    min-height: 78vh;
+  }
+
+  .wordmark {
+    min-height: 78vh;
+    padding-top: 30px;
+  }
+}
+
+/* ---------- Date / Car ---------- */
+
+.date-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 19px;
+  padding-bottom: 0;
+}
+
+.date-section__car-wrap {
+  position: relative;
+  width: min(460px, 88vw);
+  margin: 0 auto;
+}
+
+.date-section__car {
+  width: 100%;
+  height: auto;
+  display: block;
+  animation: carDrive 3.2s steps(4) infinite;
+}
+
+/* ---------- Countdown ---------- */
+
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: clamp(65px, 13vw, 130px);
+  padding-bottom: 60px;
+}
+
+.countdown__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: clamp(56px, 20vw, 120px);
+}
+
+.countdown__value {
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: clamp(28px, 9vw, 64px);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.countdown__label {
+  margin-top: 14px;
+  font-family: 'Spectral', serif;
+  font-size: clamp(10px, 2.6vw, 15px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.7;
+}
+
+.countdown__colon {
+  width: clamp(14px, 4vw, 32px);
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: clamp(28px, 9vw, 64px);
+  text-align: center;
+  color: var(--ink);
+}
+
+/* "Floors" layout — each unit stacked as its own row, number centered on the page */
+.countdown__row--vertical {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  gap: clamp(18px, 4vw, 32px);
+}
+
+.countdown__row--vertical .countdown__unit {
+  display: grid;
+  grid-template-columns: 1fr 1.8em 1fr;
+  grid-auto-flow: dense;
+  align-items: center;
+  column-gap: clamp(12px, 3vw, 24px);
+  width: 100%;
+  padding: 0;
+  border: none;
+  font-size: clamp(28px, 9vw, 64px);
+}
+
+.countdown__row--vertical .countdown__value {
+  grid-column: 2;
+  text-align: center;
+}
+
+.countdown__row--vertical .countdown__label {
+  margin-top: 0;
+  font-family: 'Windsong', cursive;
+  font-style: italic;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: clamp(20px, 5vw, 34px);
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.countdown__row--vertical .countdown__unit:nth-child(odd) .countdown__label {
+  grid-column: 1;
+  justify-self: end;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.countdown__row--vertical .countdown__unit:nth-child(even) .countdown__label {
+  grid-column: 3;
+  justify-self: start;
+  text-align: left;
+  margin-left: 20px;
+}
+
+/* ---------- Tagline callouts ---------- */
+
+.tagline-callout {
+  padding: clamp(40px, 8vw, 70px) 32px;
+}
+
+.tagline-callout--2 {
+  padding: clamp(30px, 6vw, 50px) 32px clamp(40px, 8vw, 70px);
+}
+
+.tagline-callout p {
+  font-family: 'Windsong', cursive;
+  font-style: italic;
+  margin: 0;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: opacity 5s ease, clip-path 5s ease;
+}
+
+.tagline-callout p.is-revealed {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+.tagline-mid {
+  padding-bottom: clamp(10px, 2vw, 20px);
+}
+
+.tagline-mid p {
+  color: #c2c3b0;
+  font-size: clamp(20px, 4.5vw, 32px);
+}
+
+.tagline-2 p {
+  color: #89906c;
+  font-size: clamp(19px, 4vw, 30px);
+}
+
+/* ---------- Map ---------- */
+
+.map-section {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.map-section__bg {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.map-section__bg--mobile {
+  display: none;
+  opacity: 0.2;
+}
+
+.map-section__bg--desktop {
+  display: block;
+  opacity: 0.1;
+}
+
+@media (max-width: 700px) {
+  .map-section__bg--mobile {
+    display: block;
+  }
+
+  .map-section__bg--desktop {
+    display: none;
+  }
+}
+
+.map-section__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.map-section__pin {
+  width: clamp(38px, 8vw, 56px);
+  height: auto;
+  margin: 0 auto 24px;
+  display: block;
+}
+
+.map-section__route {
+  width: min(980px, 100%);
+  height: auto;
+  margin: 0 auto 40px;
+  display: block;
+}
+
+.map-section__buttons {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-pill {
+  font-family: 'Spectral', serif;
+  font-size: clamp(13px, 3vw, 15px);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--cream);
+  background: var(--ink);
+  padding: 16px clamp(22px, 5vw, 34px);
+  border-radius: 999px;
+  display: inline-block;
+}
+
+/* ---------- Disco / Transition ---------- */
+
+.transition-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: clamp(50px, 10vw, 80px);
+  padding-bottom: 30px;
+}
+
+.transition-section__disco {
+  margin: 0 auto 24px;
+}
+
+.transition-section__disco img {
+  width: 120px;
+  height: 165px;
+  display: block;
+  animation: discoFlip 3.2s steps(1, jump-end) infinite;
+}
+
+.transition-section p {
+  font-family: 'Windsong', cursive;
+  font-style: italic;
+  font-size: clamp(24px, 5vw, 36px);
+  color: var(--grad-cream);
+  margin: 0;
+}
+
+/* ---------- Info sections (Ceremonia / Dress Code / Lista de Novios) ---------- */
+
+.info-section {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+@media (max-width: 700px) {
+  .info-section--dress-code {
+    min-height: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.info-section__title {
+  height: auto;
+  margin: 0 auto 24px;
+  display: block;
+}
+
+.info-section__title--ceremonia { width: min(340px, 78vw); }
+.info-section__title--dress-code { width: min(340px, 78vw); }
+.info-section__title--lista-novios { width: min(340px, 78vw); }
+
+.info-section__icon {
+  height: auto;
+  margin: 0 auto 32px;
+  display: block;
+}
+
+.info-section__icon--ceremonia { width: min(294px, 60vw); }
+.info-section__icon--dress-code { width: min(182px, 40vw); }
+.info-section__icon--lista-novios { width: min(294px, 60vw); }
+
+.info-section__body {
+  font-family: 'Jost', sans-serif;
+  font-weight: 200;
+  font-size: clamp(16px, 3.6vw, 20px);
+  line-height: 1.7;
+  color: var(--text-light);
+  opacity: 0.9;
+  max-width: 540px;
+  margin: 0 auto;
+  white-space: pre-line;
+}
+
+.info-section__cta {
+  display: inline-block;
+  margin-top: 32px;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  background: var(--text-light);
+  padding: 17px 36px;
+  border-radius: 999px;
+}
+
+.info-section--ceremonia .info-section__cta { color: var(--section-1); }
+.info-section--dress-code .info-section__cta { color: var(--section-2); }
+.info-section--lista-novios .info-section__cta { color: var(--section-3); }
+
+/* ---------- RSVP ---------- */
+
+.rsvp {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.rsvp__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 22px);
+  margin-bottom: 44px;
+}
+
+.rsvp__heading img {
+  flex-shrink: 0;
+}
+
+.rsvp__heading-left { width: clamp(50px, 12vw, 98px); height: auto; }
+.rsvp__heading-right { width: clamp(40px, 10vw, 78px); height: auto; }
+
+.rsvp__eyebrow {
+  font-family: 'Windsong', cursive;
+  font-style: italic;
+  font-size: clamp(20px, 5vw, 30px);
+  color: var(--text-light);
+  margin: 0 0 6px;
+}
+
+.rsvp__title {
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: clamp(28px, 8vw, 44px);
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.rsvp__thanks {
+  font-family: 'Spectral', serif;
+  font-size: 17px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.rsvp__form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.rsvp__field p {
+  font-family: 'Spectral', serif;
+  font-size: 17px;
+  color: var(--text-light);
+  margin: 0 0 10px;
+}
+
+.rsvp__field input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Spectral', serif;
+  font-size: 18px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--text-light);
+  background: transparent;
+  color: var(--text-light);
+}
+
+.rsvp__field input::placeholder {
+  color: var(--text-light);
+  opacity: 0.5;
+}
+
+.rsvp__attend-row {
+  display: flex;
+  gap: 14px;
+}
+
+.rsvp__attend-btn {
+  flex: 1;
+  font-family: 'Spectral', serif;
+  font-size: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--text-light);
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-light);
+}
+
+.rsvp__attend-btn.is-active {
+  background: var(--text-light);
+  color: var(--olive-rsvp-2);
+}
+
+.rsvp__submit {
+  font-family: 'Spectral', serif;
+  font-size: 18px;
+  padding: 18px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: var(--text-light);
+  color: var(--olive-rsvp-2);
+  margin-top: 8px;
+}
+
+.rsvp__disclaimer {
+  font-family: 'Spectral', serif;
+  font-size: 11px;
+  color: var(--text-light);
+  opacity: 0.5;
+  margin-top: 20px;
+}
+
+/* ---------- Contact ---------- */
+
+.contact {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.contact__frame {
+  position: relative;
+  padding: clamp(50px, 14vw, 110px) clamp(28px, 10vw, 90px);
+}
+
+.contact__frame-art {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+@media (max-width: 700px) {
+  .contact__frame {
+    padding: clamp(80px, 22vw, 170px) clamp(55px, 18vw, 150px);
+  }
+
+  .contact__frame-art {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    width: 160%;
+    height: 160%;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}
+
+.contact__content {
+  position: relative;
+  z-index: 1;
+}
+
+.contact__eyebrow {
+  font-family: 'Windsong', cursive;
+  font-style: italic;
+  font-size: clamp(20px, 4.5vw, 26px);
+  color: var(--text-light);
+  margin: 0 0 6px;
+}
+
+.contact__title {
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: clamp(24px, 6vw, 36px);
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin: 0 0 32px;
+}
+
+.contact__entry {
+  font-family: 'Spectral', serif;
+  font-size: clamp(15px, 3.6vw, 20px);
+  color: var(--text-light);
+  margin: 8px 0;
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+
+.footer__lyric {
+  font-family: 'Windsong', cursive;
+  font-style: italic;
+  font-size: clamp(24px, 6vw, 38px);
+  color: var(--text-light);
+  opacity: 0.85;
+  line-height: 1.5;
+  margin: 0 0 clamp(50px, 12vw, 100px);
+}
+
+.footer__seal {
+  width: 120px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  fill: var(--text-light);
+}
+
+/* ---------- Persistent play/pause button ---------- */
+
+.play-toggle {
+  position: fixed;
+  bottom: clamp(16px, 4vw, 32px);
+  right: clamp(16px, 4vw, 32px);
+  z-index: 1000;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--dark-olive);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.play-toggle.is-visible {
+  display: flex;
+  opacity: 1;
+}
+
+.play-toggle__ring {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cream);
+  opacity: 0.35;
+}
+
+.play-toggle__dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cream);
+  opacity: 0.6;
+}
+
+.play-toggle__bars {
+  display: flex;
+  gap: 5px;
+  z-index: 1;
+}
+
+.play-toggle__bars span {
+  width: 5px;
+  height: 18px;
+  background: var(--cream);
+  border-radius: 1px;
+}
+
+.play-toggle__play {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 16px solid var(--cream);
+  z-index: 1;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero.is-started #vinyl-spin-group,
+  .date-section__car,
+  .transition-section__disco img,
+  .wordmark__stars img {
+    animation: none !important;
+  }
+}

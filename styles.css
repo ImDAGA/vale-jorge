@@ -281,6 +281,15 @@ section {
   padding-bottom: 60px;
 }
 
+.countdown__title {
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: clamp(24px, 6vw, 36px);
+  letter-spacing: 0.05em;
+  color: var(--grad-dark);
+  margin: 0 0 clamp(30px, 6vw, 50px);
+}
+
 .countdown__row {
   display: flex;
   align-items: flex-start;
@@ -472,6 +481,15 @@ section {
   height: auto;
   margin: 0 auto 24px;
   display: block;
+}
+
+.map-section__title {
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: clamp(24px, 6vw, 36px);
+  letter-spacing: 0.05em;
+  color: var(--grad-dark);
+  margin: 0 0 clamp(30px, 6vw, 50px);
 }
 
 .map-section__route {

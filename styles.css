@@ -441,30 +441,11 @@ section {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: clamp(220px, 40%, 400px);
   height: auto;
+  opacity: 1;
   z-index: 0;
   pointer-events: none;
-}
-
-.map-section__bg--mobile {
-  display: none;
-  opacity: 0.2;
-}
-
-.map-section__bg--desktop {
-  display: block;
-  opacity: 0.1;
-}
-
-@media (max-width: 700px) {
-  .map-section__bg--mobile {
-    display: block;
-  }
-
-  .map-section__bg--desktop {
-    display: none;
-  }
 }
 
 .map-section__content {

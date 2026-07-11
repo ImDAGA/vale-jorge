@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/b", "destination": "/index.html?group=b" },
+    { "source": "/c", "destination": "/index.html?group=c" }
+  ]
+}

@@ -10,6 +10,33 @@
   const WEDDING_DATE = new Date(2026, 9, 24, 17, 0, 0).getTime();
   const ADDRESS = 'Parque San Rafael, 30 Ruta 5 Norte, Lampa, Región Metropolitana, Chile';
 
+  // ---------- Guest-group variants ----------
+  // Three invitation variants share this one page:
+  //   a (default, no param) — pareja, cena + fiesta. Original copy/fields.
+  //   b (?group=b) — pareja, solo fiesta. Different ceremonia copy, no
+  //     dietary-restriction field.
+  //   c (?group=c) — sin pareja, solo fiesta. Same as b, plus no
+  //     companion field.
+  // Routed via clean URLs (/b, /c) that Vercel rewrites to this page with
+  // the query param — see vercel.json.
+  const GUEST_GROUP = new URLSearchParams(window.location.search).get('group');
+
+  const CEREMONIA_BODY_BC =
+    "Acompáñanos celebrando el mejor día de nuestras vidas como nos gusta: con buena música y - si vienes - mejor compañía todavía. Será una noche inolvidable.";
+
+  if (GUEST_GROUP === 'b' || GUEST_GROUP === 'c') {
+    const ceremoniaBody = document.getElementById('ceremoniaBody');
+    if (ceremoniaBody) ceremoniaBody.textContent = CEREMONIA_BODY_BC;
+
+    const dietaryField = document.getElementById('rsvpDietaryField');
+    if (dietaryField) dietaryField.hidden = true;
+  }
+
+  if (GUEST_GROUP === 'c') {
+    const companionField = document.getElementById('rsvpCompanionField');
+    if (companionField) companionField.hidden = true;
+  }
+
   const hero = document.getElementById('hero');
   const heroTagline = document.getElementById('heroTagline');
   const audio = document.getElementById('bgAudio');

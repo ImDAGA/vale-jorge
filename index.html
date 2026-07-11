@@ -149,7 +149,7 @@
   <section class="info-section info-section--ceremonia" data-screen-label="Ceremonia">
     <img class="info-section__title info-section__title--ceremonia" src="assets/ceremonia-title.svg" alt="Ceremonia">
     <img class="info-section__icon info-section__icon--ceremonia" src="assets/ceremonia-tint.svg" alt="Ceremonia">
-    <p class="info-section__body">Los esperamos para compartir con nosotros una ceremonia religiosa y celebrar juntos este día tan especial.
+    <p class="info-section__body" id="ceremoniaBody">Los esperamos para compartir con nosotros una ceremonia religiosa y celebrar juntos este día tan especial.
 
 Luego brindaremos, disfrutaremos de buena música y viviremos una noche inolvidable, todo en un mismo lugar.</p>
   </section>
@@ -192,7 +192,7 @@ Es decir, formal. Pero lindos. Acicalados.</p>
         <p>Nombre y apellido</p>
         <input type="text" id="rsvpName" name="name" required>
       </div>
-      <div class="rsvp__field">
+      <div class="rsvp__field" id="rsvpCompanionField">
         <p>Acompañante: nombre y apellido</p>
         <input type="text" id="rsvpCompanion" name="companion">
       </div>
@@ -203,7 +203,7 @@ Es decir, formal. Pero lindos. Acicalados.</p>
           <button type="button" class="rsvp__attend-btn" id="attendNo">No, me da miedo</button>
         </div>
       </div>
-      <div class="rsvp__field">
+      <div class="rsvp__field" id="rsvpDietaryField">
         <p>¿Eres vegetariano/vegano/celíaco? Indica nombre y restricción</p>
         <input type="text" id="rsvpDietary" name="dietary">
       </div>
@@ -252,6 +252,6 @@ Es decir, formal. Pero lindos. Acicalados.</p>
   <div class="play-toggle__play" id="playIconPlay" hidden></div>
 </button>
 
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>

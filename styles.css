@@ -440,7 +440,6 @@ section {
   width: clamp(220px, 40%, 400px);
   height: auto;
   opacity: 1;
-  margin-top: clamp(30px, 6vw, 60px);
   pointer-events: none;
 }
 
@@ -503,12 +502,13 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: clamp(30px, 6vw, 60px);
   padding-top: clamp(50px, 10vw, 80px);
-  padding-bottom: 30px;
+  padding-bottom: clamp(50px, 10vw, 80px);
 }
 
 .transition-section__disco {
-  margin: 0 auto 24px;
+  margin: 0 auto;
 }
 
 .transition-section__disco img {

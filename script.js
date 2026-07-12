@@ -273,14 +273,21 @@
       companion: document.getElementById('rsvpCompanion').value,
       attending,
       dietary: document.getElementById('rsvpDietary').value,
+      group: GUEST_GROUP || 'a',
     };
 
     if (RSVP_ENDPOINT) {
       try {
+        // Content-Type must stay text/plain — a Google Apps Script Web
+        // App has no CORS headers, so a "real" cross-origin content type
+        // like application/json would trigger a preflight it can't
+        // answer. text/plain keeps this a "simple request" (no
+        // preflight); the body is still valid JSON text, and the Apps
+        // Script side parses it with JSON.parse(e.postData.contents).
         await fetch(RSVP_ENDPOINT, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload),
         });
       } catch (err) {

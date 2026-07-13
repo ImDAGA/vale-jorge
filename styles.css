@@ -186,6 +186,13 @@ section {
   position: relative;
 }
 
+/* Group d's hero is already halved (see .group-d .hero) — halve the
+   Wordmark section too, since it directly follows and has the same
+   vertical-centering-in-a-tall-box gap before its own content starts. */
+.group-d .wordmark {
+  min-height: 50vh;
+}
+
 .wordmark__bleed {
   position: absolute;
   height: auto;
@@ -253,6 +260,10 @@ section {
   .wordmark {
     min-height: 78vh;
     padding-top: 30px;
+  }
+
+  .group-d .wordmark {
+    min-height: 39vh;
   }
 }
 

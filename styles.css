@@ -188,9 +188,17 @@ section {
 
 /* Group d's hero is already halved (see .group-d .hero) — halve the
    Wordmark section too, since it directly follows and has the same
-   vertical-centering-in-a-tall-box gap before its own content starts. */
+   vertical-centering-in-a-tall-box gap before its own content starts.
+   Fixed padding (not vh + centering slack) so the gap above the logo
+   (padding-top) and the gap below it (padding-bottom + the Date
+   section's own 19px padding-top) come out equal — this is deliberately
+   NOT scoped inside the mobile media query: the higher specificity of
+   `.group-d .wordmark` beats the mobile-query `.wordmark` rule at any
+   viewport width, so one rule covers every breakpoint. */
 .group-d .wordmark {
-  min-height: 50vh;
+  min-height: auto;
+  padding-top: 32px;
+  padding-bottom: 13px;
 }
 
 .wordmark__bleed {
@@ -260,10 +268,6 @@ section {
   .wordmark {
     min-height: 78vh;
     padding-top: 30px;
-  }
-
-  .group-d .wordmark {
-    min-height: 39vh;
   }
 }
 

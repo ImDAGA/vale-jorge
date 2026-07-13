@@ -42,6 +42,8 @@
   }
 
   if (IS_GROUP_D) {
+    document.documentElement.classList.add('group-d');
+
     const heroTaglineWrap = document.querySelector('.hero__tagline-wrap');
     if (heroTaglineWrap) heroTaglineWrap.hidden = true;
 

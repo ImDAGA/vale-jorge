@@ -120,6 +120,12 @@ section {
   position: relative;
 }
 
+/* Group d has no tagline filling the space below the illustration, so
+   halve the section height to keep the gap to the next section tight. */
+.group-d .hero {
+  min-height: 50vh;
+}
+
 .hero__illustration {
   width: min(420px, 68vw);
   height: auto;
@@ -238,6 +244,10 @@ section {
 
   .hero {
     min-height: 78vh;
+  }
+
+  .group-d .hero {
+    min-height: 39vh;
   }
 
   .wordmark {

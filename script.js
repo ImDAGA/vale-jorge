@@ -11,15 +11,19 @@
   const ADDRESS = 'Parque San Rafael, 30 Ruta 5 Norte, Lampa, Región Metropolitana, Chile';
 
   // ---------- Guest-group variants ----------
-  // Three invitation variants share this one page:
+  // Four invitation variants share this one page:
   //   a (default, no param) — pareja, cena + fiesta. Original copy/fields.
   //   b (?group=b) — pareja, solo fiesta. Different ceremonia copy, no
   //     dietary-restriction field.
   //   c (?group=c) — sin pareja, solo fiesta. Same as b, plus no
   //     companion field.
-  // Routed via clean URLs (/b, /c) that Vercel rewrites to this page with
-  // the query param — see vercel.json.
+  //   d (?group=d) — like a, but no hero tagline/reveal effect, and the
+  //     turntable illustration swaps its lid detail (no "Play" CTA) since
+  //     the trigger is just the first scroll, not a click target.
+  // Routed via clean URLs (/b, /c, /d) that Vercel rewrites to this page
+  // with the query param — see vercel.json.
   const GUEST_GROUP = new URLSearchParams(window.location.search).get('group');
+  const IS_GROUP_D = GUEST_GROUP === 'd';
 
   const CEREMONIA_BODY_BC =
     "Acompáñanos celebrando el mejor día de nuestras vidas como nos gusta: con buena música y - si vienes - mejor compañía todavía. Será una noche inolvidable.";
@@ -37,6 +41,20 @@
     if (companionField) companionField.hidden = true;
   }
 
+  if (IS_GROUP_D) {
+    const heroTaglineWrap = document.querySelector('.hero__tagline-wrap');
+    if (heroTaglineWrap) heroTaglineWrap.hidden = true;
+
+    // Use setAttribute/removeAttribute rather than the .hidden property —
+    // these are <g> (SVG) elements, and .hidden reflection isn't as
+    // reliably supported on SVG elements as it is on HTML ones.
+    const heroCta = document.getElementById('hero-cta');
+    if (heroCta) heroCta.setAttribute('hidden', '');
+
+    const heroLidDetail = document.getElementById('hero-lid-detail');
+    if (heroLidDetail) heroLidDetail.removeAttribute('hidden');
+  }
+
   const hero = document.getElementById('hero');
   const heroTagline = document.getElementById('heroTagline');
   const audio = document.getElementById('bgAudio');
@@ -47,8 +65,9 @@
   const tagline2 = document.getElementById('tagline2');
 
   // ---------- Hero tagline word spans ----------
+  // Group d has no hero tagline/reveal effect at all (see above).
   const TAGLINE_TEXT = "Maybe you're amazed, that we're (finally) getting married";
-  const words = TAGLINE_TEXT.split(' ');
+  const words = IS_GROUP_D ? [] : TAGLINE_TEXT.split(' ');
   const wordSpans = words.map((w) => {
     const span = document.createElement('span');
     span.textContent = w + ' ';
@@ -79,7 +98,9 @@
   let touchStartY = null;
 
   function isLocked() {
-    return revealProgress < 1;
+    // Group d has no reveal to gate scroll behind — it should scroll
+    // normally from the very first gesture.
+    return !IS_GROUP_D && revealProgress < 1;
   }
 
   function startExperience() {
@@ -202,6 +223,11 @@
   let tagline2Revealed = false;
 
   function handlePageScroll() {
+    // Group d isn't scroll-locked, so it never goes through
+    // handleWheel/handleTouchMove — the first real page scroll is what
+    // should start the vinyl spin + audio for it.
+    if (!started && window.scrollY > 0) startExperience();
+
     const past = window.scrollY > window.innerHeight * 0.6;
     if (past !== pastHero) {
       pastHero = past;

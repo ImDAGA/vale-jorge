@@ -282,6 +282,14 @@ section {
   padding-bottom: 0;
 }
 
+/* Group d: adjust this section's margin so the gap from the Vale&Jorge
+   logo to this illustration is exactly 128px, regardless of what's
+   between them (stars, padding, etc.) — measured at 116px natural gap,
+   so +12px opens it to 128px exactly. */
+.group-d .date-section {
+  margin-top: 12px;
+}
+
 .date-section__car-wrap {
   position: relative;
   width: min(460px, 88vw);

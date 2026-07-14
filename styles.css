@@ -120,9 +120,10 @@ section {
   position: relative;
 }
 
-/* Group d has no tagline filling the space below the illustration, so
-   halve the section height to keep the gap to the next section tight. */
-.group-d .hero {
+/* Non-original groups have no tagline filling the space below the
+   illustration, so halve the section height to keep the gap to the next
+   section tight. */
+.alt-hero .hero {
   min-height: 50vh;
 }
 
@@ -186,16 +187,16 @@ section {
   position: relative;
 }
 
-/* Group d's hero is already halved (see .group-d .hero) — halve the
+/* Non-original's hero is already halved (see .alt-hero .hero) — halve the
    Wordmark section too, since it directly follows and has the same
    vertical-centering-in-a-tall-box gap before its own content starts.
    Fixed padding (not vh + centering slack) so the gap above the logo
    (padding-top) and the gap below it (padding-bottom + the Date
    section's own 19px padding-top) come out equal — this is deliberately
    NOT scoped inside the mobile media query: the higher specificity of
-   `.group-d .wordmark` beats the mobile-query `.wordmark` rule at any
+   `.alt-hero .wordmark` beats the mobile-query `.wordmark` rule at any
    viewport width, so one rule covers every breakpoint. */
-.group-d .wordmark {
+.alt-hero .wordmark {
   min-height: auto;
   padding-top: 32px;
   padding-bottom: 13px;
@@ -261,7 +262,7 @@ section {
     min-height: 78vh;
   }
 
-  .group-d .hero {
+  .alt-hero .hero {
     min-height: 39vh;
   }
 
@@ -282,11 +283,11 @@ section {
   padding-bottom: 0;
 }
 
-/* Group d: adjust this section's margin so the gap from the Vale&Jorge
-   logo to this illustration is exactly 200px, regardless of what's
-   between them (stars, padding, etc.) — measured at 116px natural gap,
-   so +84px opens it to 200px exactly. */
-.group-d .date-section {
+/* Non-original: adjust this section's margin so the gap from the
+   Vale&Jorge logo to this illustration is exactly 200px, regardless of
+   what's between them (stars, padding, etc.) — measured at 116px
+   natural gap, so +84px opens it to 200px exactly. */
+.alt-hero .date-section {
   margin-top: 84px;
 }
 
@@ -314,9 +315,10 @@ section {
   padding-bottom: 60px;
 }
 
-/* Group d: add 100px on top of the existing gap between the date/car
-   illustration and this section's title, regardless of viewport. */
-.group-d .countdown {
+/* Non-original: add 100px on top of the existing gap between the
+   date/car illustration and this section's title, regardless of
+   viewport. */
+.alt-hero .countdown {
   margin-top: 100px;
 }
 

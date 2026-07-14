@@ -13,20 +13,19 @@
   // ---------- Guest-group variants ----------
   // The bare URL (no ?group= param at all) is "original" — frozen, and
   // never touched by guest-group edits below. Four *editable* variants
-  // share this one page via an explicit ?group= param:
-  //   a (?group=a) — pareja, cena + fiesta. Same content as original.
+  // share this one page via an explicit ?group= param, and all four get
+  // the same hero-banner treatment (vinyl-lamp-b lid, no tagline/reveal
+  // effect, no mid-page lyric callouts):
+  //   a (?group=a) — pareja, cena + fiesta.
   //   b (?group=b) — pareja, solo fiesta. Different ceremonia copy, no
   //     dietary-restriction field.
   //   c (?group=c) — sin pareja, solo fiesta. Same as b, plus no
   //     companion field.
-  //   d (?group=d) — like a, but no hero tagline/reveal effect, and the
-  //     turntable illustration swaps its lid detail (no "Play" CTA) since
-  //     the trigger is just the first scroll, not a click target.
+  //   d (?group=d) — same as a, kept as its own value for routing.
   // Routed via clean URLs (/a, /b, /c, /d) that Vercel rewrites to this
   // page with the query param — see vercel.json.
   const GUEST_GROUP = new URLSearchParams(window.location.search).get('group');
   const IS_ORIGINAL = GUEST_GROUP === null;
-  const IS_GROUP_D = GUEST_GROUP === 'd';
 
   const CEREMONIA_BODY_BC =
     "Acompáñanos celebrando el mejor día de nuestras vidas como nos gusta: con buena música y - si vienes - mejor compañía todavía. Será una noche inolvidable.";
@@ -44,8 +43,8 @@
     if (companionField) companionField.hidden = true;
   }
 
-  if (IS_GROUP_D) {
-    document.documentElement.classList.add('group-d');
+  if (!IS_ORIGINAL) {
+    document.documentElement.classList.add('alt-hero');
 
     const heroTaglineWrap = document.querySelector('.hero__tagline-wrap');
     if (heroTaglineWrap) heroTaglineWrap.hidden = true;
@@ -58,6 +57,12 @@
 
     const heroLidDetail = document.getElementById('hero-lid-detail');
     if (heroLidDetail) heroLidDetail.removeAttribute('hidden');
+
+    const tagline1Section = document.querySelector('.tagline-mid');
+    if (tagline1Section) tagline1Section.hidden = true;
+
+    const tagline2Section = document.querySelector('.tagline-2');
+    if (tagline2Section) tagline2Section.hidden = true;
   }
 
   const hero = document.getElementById('hero');
@@ -70,9 +75,9 @@
   const tagline2 = document.getElementById('tagline2');
 
   // ---------- Hero tagline word spans ----------
-  // Group d has no hero tagline/reveal effect at all (see above).
+  // Only original has the hero tagline/reveal effect at all (see above).
   const TAGLINE_TEXT = "Maybe you're amazed, that we're (finally) getting married";
-  const words = IS_GROUP_D ? [] : TAGLINE_TEXT.split(' ');
+  const words = IS_ORIGINAL ? TAGLINE_TEXT.split(' ') : [];
   const wordSpans = words.map((w) => {
     const span = document.createElement('span');
     span.textContent = w + ' ';
@@ -103,9 +108,9 @@
   let touchStartY = null;
 
   function isLocked() {
-    // Group d has no reveal to gate scroll behind — it should scroll
-    // normally from the very first gesture.
-    return !IS_GROUP_D && revealProgress < 1;
+    // Only original has a reveal to gate scroll behind — every other
+    // group should scroll normally from the very first gesture.
+    return IS_ORIGINAL && revealProgress < 1;
   }
 
   function startExperience() {
@@ -228,9 +233,9 @@
   let tagline2Revealed = false;
 
   function handlePageScroll() {
-    // Group d isn't scroll-locked, so it never goes through
+    // Non-original groups aren't scroll-locked, so they never go through
     // handleWheel/handleTouchMove — the first real page scroll is what
-    // should start the vinyl spin + audio for it.
+    // should start the vinyl spin + audio for them.
     if (!started && window.scrollY > 0) startExperience();
 
     const past = window.scrollY > window.innerHeight * 0.6;
@@ -238,6 +243,10 @@
       pastHero = past;
       playToggle.classList.toggle('is-visible', pastHero);
     }
+
+    // The mid-page lyric callouts (and their reveal-on-scroll animation)
+    // only exist for original — every other group has them removed.
+    if (!IS_ORIGINAL) return;
 
     if (!tagline1Revealed) {
       const rect = tagline1.getBoundingClientRect();

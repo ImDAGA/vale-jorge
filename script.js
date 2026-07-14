@@ -353,7 +353,7 @@
       companion: document.getElementById('rsvpCompanion').value,
       attending,
       dietary: document.getElementById('rsvpDietary').value,
-      group: GUEST_GROUP || 'a',
+      group: GUEST_GROUP || 'OG',
     };
 
     if (RSVP_ENDPOINT) {

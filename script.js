@@ -11,8 +11,10 @@
   const ADDRESS = 'Parque San Rafael, 30 Ruta 5 Norte, Lampa, Región Metropolitana, Chile';
 
   // ---------- Guest-group variants ----------
-  // Four invitation variants share this one page:
-  //   a (default, no param) — pareja, cena + fiesta. Original copy/fields.
+  // The bare URL (no ?group= param at all) is "original" — frozen, and
+  // never touched by guest-group edits below. Four *editable* variants
+  // share this one page via an explicit ?group= param:
+  //   a (?group=a) — pareja, cena + fiesta. Same content as original.
   //   b (?group=b) — pareja, solo fiesta. Different ceremonia copy, no
   //     dietary-restriction field.
   //   c (?group=c) — sin pareja, solo fiesta. Same as b, plus no
@@ -20,9 +22,10 @@
   //   d (?group=d) — like a, but no hero tagline/reveal effect, and the
   //     turntable illustration swaps its lid detail (no "Play" CTA) since
   //     the trigger is just the first scroll, not a click target.
-  // Routed via clean URLs (/b, /c, /d) that Vercel rewrites to this page
-  // with the query param — see vercel.json.
+  // Routed via clean URLs (/a, /b, /c, /d) that Vercel rewrites to this
+  // page with the query param — see vercel.json.
   const GUEST_GROUP = new URLSearchParams(window.location.search).get('group');
+  const IS_ORIGINAL = GUEST_GROUP === null;
   const IS_GROUP_D = GUEST_GROUP === 'd';
 
   const CEREMONIA_BODY_BC =

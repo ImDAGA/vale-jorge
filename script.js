@@ -28,7 +28,7 @@
   const IS_ORIGINAL = GUEST_GROUP === null;
 
   const CEREMONIA_BODY_BC =
-    "Acompáñanos celebrando el mejor día de nuestras vidas como nos gusta: con buena música y - si vienes - mejor compañía todavía. Será una noche inolvidable.";
+    "Acompáñanos a celebrar el día más importante de nuestras vidas como más nos gusta: compartiendo, brindando y disfrutando de buena música junto a quienes más queremos. Será una noche inolvidable.";
 
   if (GUEST_GROUP === 'b' || GUEST_GROUP === 'c') {
     const ceremoniaBody = document.getElementById('ceremoniaBody');

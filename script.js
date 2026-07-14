@@ -1,11 +1,8 @@
 (() => {
   'use strict';
 
-  // TODO: point this at a real RSVP backend before going live — e.g. a
-  // Google Apps Script Web App URL bound to a Sheet, or a Formspree-style
-  // endpoint. Left blank for now, so submissions only show the local
-  // thank-you message and are NOT stored anywhere.
-  const RSVP_ENDPOINT = '';
+  // Google Apps Script Web App bound to the RSVP Google Sheet.
+  const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwB9wBuJzzQjexSdSYJTOBGNHl294MdRF3A9gtN5PZBAxIMs98ESKfQkNbqbKxHK_2sCw/exec';
 
   const WEDDING_DATE = new Date(2026, 9, 24, 17, 0, 0).getTime();
   const ADDRESS = 'Parque San Rafael, 30 Ruta 5 Norte, Lampa, Región Metropolitana, Chile';

@@ -283,11 +283,11 @@ section {
 }
 
 /* Group d: adjust this section's margin so the gap from the Vale&Jorge
-   logo to this illustration is exactly 128px, regardless of what's
+   logo to this illustration is exactly 200px, regardless of what's
    between them (stars, padding, etc.) — measured at 116px natural gap,
-   so +12px opens it to 128px exactly. */
+   so +84px opens it to 200px exactly. */
 .group-d .date-section {
-  margin-top: 12px;
+  margin-top: 84px;
 }
 
 .date-section__car-wrap {
@@ -314,8 +314,14 @@ section {
   padding-bottom: 60px;
 }
 
+/* Group d: add 100px on top of the existing gap between the date/car
+   illustration and this section's title, regardless of viewport. */
+.group-d .countdown {
+  margin-top: 100px;
+}
+
 .countdown__title {
-  font-family: 'Cinzel', serif;
+  font-family: 'WindSong', cursive;
   font-weight: 500;
   font-size: clamp(24px, 6vw, 36px);
   letter-spacing: 0.05em;

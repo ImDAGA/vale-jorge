@@ -65,6 +65,18 @@
     if (tagline2Section) tagline2Section.hidden = true;
   }
 
+  // Group d only: hide these sections entirely (no space left behind).
+  if (GUEST_GROUP === 'd') {
+    const heroSection = document.getElementById('hero');
+    if (heroSection) heroSection.hidden = true;
+
+    const countdownSection = document.querySelector('.countdown');
+    if (countdownSection) countdownSection.hidden = true;
+
+    const dressCodeSection = document.querySelector('.info-section--dress-code');
+    if (dressCodeSection) dressCodeSection.hidden = true;
+  }
+
   const hero = document.getElementById('hero');
   const heroTagline = document.getElementById('heroTagline');
   const audio = document.getElementById('bgAudio');

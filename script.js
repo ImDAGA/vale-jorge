@@ -67,6 +67,8 @@
 
   // Group d only: hide these sections entirely (no space left behind).
   if (GUEST_GROUP === 'd') {
+    document.documentElement.classList.add('group-d');
+
     const heroSection = document.getElementById('hero');
     if (heroSection) heroSection.hidden = true;
 
@@ -75,6 +77,35 @@
 
     const dressCodeSection = document.querySelector('.info-section--dress-code');
     if (dressCodeSection) dressCodeSection.hidden = true;
+
+    const transitionSection = document.querySelector('.transition-section');
+    if (transitionSection) transitionSection.hidden = true;
+
+    // Pull Ceremonia and Lista de Novios up to cut the whitespace left
+    // by the sections above (removed entirely) and their own vh-based
+    // vertical centering. Measured in JS rather than a fixed CSS
+    // margin-top because the natural gap isn't a fixed pixel amount —
+    // it depends on viewport height (min-height: Nvh centering slack)
+    // and viewport width (responsive images changing height). Runs
+    // after "load" so every image's real intrinsic size is in.
+    window.addEventListener('load', () => {
+      const buttons = document.querySelector('.map-section__buttons');
+      const ceremoniaSection = document.querySelector('.info-section--ceremonia');
+      const ceremoniaTitle = document.querySelector('.info-section__title--ceremonia');
+      const ceremoniaBody = document.getElementById('ceremoniaBody');
+      const listaSection = document.querySelector('.info-section--lista-novios');
+      const listaTitle = document.querySelector('.info-section__title--lista-novios');
+
+      if (buttons && ceremoniaSection && ceremoniaTitle) {
+        const gap1 = ceremoniaTitle.getBoundingClientRect().top - buttons.getBoundingClientRect().bottom;
+        ceremoniaSection.style.marginTop = `${-gap1 * 0.6}px`;
+      }
+
+      if (ceremoniaBody && listaSection && listaTitle) {
+        const gap2 = listaTitle.getBoundingClientRect().top - ceremoniaBody.getBoundingClientRect().bottom;
+        listaSection.style.marginTop = `${-gap2 * 0.8}px`;
+      }
+    });
   }
 
   const hero = document.getElementById('hero');

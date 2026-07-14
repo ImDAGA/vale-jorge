@@ -99,6 +99,19 @@ a {
   pointer-events: none;
 }
 
+/* Group d's page is much shorter (several sections removed), so the
+   same percentage-based stops would keep everything cream for longer
+   than intended — bring the sage/dark transition in earlier. */
+.group-d .page__bg {
+  background: linear-gradient(
+    to bottom,
+    var(--grad-cream) 0%,
+    var(--grad-cream) 12%,
+    var(--grad-sage) 28%,
+    var(--grad-dark) 50%
+  );
+}
+
 section {
   box-sizing: border-box;
   padding-left: clamp(20px, 5vw, 32px);
@@ -586,6 +599,12 @@ section {
     padding-bottom: 0;
   }
 }
+
+/* Group d: with the transition (disco ball) section removed, Ceremonia
+   and Lista de Novios get pulled up to cut the leftover whitespace. The
+   actual margin-top is computed and set in script.js, since the natural
+   gap (driven by vh-centered min-height + responsive image sizing)
+   isn't a fixed pixel amount across viewports. */
 
 .info-section__title {
   height: auto;

@@ -33,6 +33,9 @@
 
     const dietaryField = document.getElementById('rsvpDietaryField');
     if (dietaryField) dietaryField.hidden = true;
+
+    const dateCarIllustration = document.getElementById('dateCarIllustration');
+    if (dateCarIllustration) dateCarIllustration.src = 'assets/fecha-auto-21.svg';
   }
 
   if (GUEST_GROUP === 'c') {

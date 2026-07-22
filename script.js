@@ -353,6 +353,7 @@
       companion: document.getElementById('rsvpCompanion').value,
       attending,
       dietary: document.getElementById('rsvpDietary').value,
+      song: document.getElementById('rsvpSong').value,
       group: GUEST_GROUP || 'OG',
     };
 

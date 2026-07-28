@@ -43,6 +43,11 @@
     if (companionField) companionField.hidden = true;
   }
 
+  if (GUEST_GROUP === 'a' || GUEST_GROUP === 'd') {
+    const songField = document.getElementById('rsvpSongField');
+    if (songField) songField.hidden = true;
+  }
+
   if (!IS_ORIGINAL) {
     document.documentElement.classList.add('alt-hero');
 

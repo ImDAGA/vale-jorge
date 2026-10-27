@@ -80,6 +80,42 @@
     border-radius: 999px;
   }
   .btn:active { opacity: 0.85; }
+  .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+
+  .nombre {
+    display: block;
+    width: 100%;
+    margin-top: calc(34 * var(--u));
+    padding: 10px 2px;
+    font-family: 'Spectral', serif;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: var(--cream);
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid var(--sage);
+    border-radius: 0;
+    text-align: center;
+    outline: none;
+  }
+  .nombre::placeholder { color: var(--cream); opacity: 0.55; }
+  .nombre:focus { border-bottom-color: var(--cream); }
+
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap; opacity: 0;
+  }
+
+  .lista { width: 100%; margin: 26px 0 0; padding: 0; list-style: none; text-align: left; }
+  .lista li { margin: 0 0 14px; font-size: 14px; letter-spacing: 0.02em; }
+  .lista__fila { display: flex; justify-content: space-between; gap: 12px; }
+  .lista__nombre { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lista__estado { flex: none; opacity: 0.8; }
+  .barra { height: 4px; margin-top: 6px; border-radius: 4px; background: rgba(138, 144, 110, 0.35); overflow: hidden; }
+  .barra > span { display: block; height: 100%; width: 0; background: var(--cream); transition: width 0.2s; }
+  .lista li.error .lista__estado { color: #e9b5a4; opacity: 1; }
+
+  .mensaje { margin: 22px 0 0; font-size: 15px; line-height: 1.5; text-align: center; min-height: 1.5em; }
 
   @media (min-width: 600px) {
     .wrap { padding: 24px 0; }
@@ -106,8 +142,151 @@
 
   <p class="texto">¿Sacaste fotos o videos durante la noche? Súbelos acá para que podamos guardarlos todos. Las lindas, las borrosas, las espontáneas, todas. Nos van a ayudar a acordarnos de la mejor noche de nuestras vidas.</p>
 
-  <a class="btn" href="https://drive.google.com/drive/folders/1suzOyYF0R5edQG1T4gZUS-98JVmAGWFr?usp=sharing" target="_blank" rel="noopener">SUBIR FOTOS Y VIDEOS</a>
+  <input class="nombre" id="nombre" type="text" maxlength="40" autocomplete="name" placeholder="Tu nombre (opcional)">
+  <label class="btn" id="btnElegir" for="archivos" role="button">ELEGIR FOTOS Y VIDEOS</label>
+  <input class="visually-hidden" id="archivos" type="file" accept="image/*,video/*" multiple>
+  <p class="mensaje" id="mensaje" aria-live="polite"></p>
+  <ul class="lista" id="lista"></ul>
 </div>
 </main>
+<script>
+(function () {
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbzwAVMuYZsmNsT11yHwrlT9bwBYpIQYJ-zu7GPNADyUr0sYSEEdw_i2ahd3PTzfnUDcHA/exec';
+  var CHUNK = 8 * 1024 * 1024; // múltiplo de 256 KB, como exige Drive
+  var TIPOS = { heic: 'image/heic', heif: 'image/heif', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
+                gif: 'image/gif', webp: 'image/webp', mov: 'video/quicktime', mp4: 'video/mp4', m4v: 'video/mp4',
+                '3gp': 'video/3gpp', webm: 'video/webm', avi: 'video/x-msvideo' };
+
+  var input = document.getElementById('archivos');
+  var nombreInput = document.getElementById('nombre');
+  var btn = document.getElementById('btnElegir');
+  var lista = document.getElementById('lista');
+  var mensaje = document.getElementById('mensaje');
+  var subiendo = false;
+  var wakeLock = null;
+
+  function tipoDe(file) {
+    if (/^(image|video)\//.test(file.type)) return file.type;
+    var ext = (file.name.split('.').pop() || '').toLowerCase();
+    return TIPOS[ext] || '';
+  }
+
+  function nombreFinal(file) {
+    var quien = nombreInput.value.trim().replace(/[\\\/:*?"<>|]/g, '');
+    return quien ? quien + ' - ' + file.name : file.name;
+  }
+
+  function pedirUrl(file, tipo) {
+    var q = 'name=' + encodeURIComponent(nombreFinal(file)) + '&type=' + encodeURIComponent(tipo) + '&size=' + file.size;
+    return fetch(ENDPOINT + '?' + q).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j.ok) throw new Error(j.error || 'No se pudo iniciar');
+      return j.url;
+    });
+  }
+
+  function putChunk(url, blob, inicio, total, onProgress) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('PUT', url);
+      xhr.setRequestHeader('Content-Range', 'bytes ' + inicio + '-' + (inicio + blob.size - 1) + '/' + total);
+      xhr.upload.onprogress = function (e) { if (e.lengthComputable) onProgress(inicio + e.loaded); };
+      xhr.onload = function () {
+        if (xhr.status === 200 || xhr.status === 201) resolve('fin');
+        else if (xhr.status === 308) resolve('sigue');
+        else reject(new Error('HTTP ' + xhr.status));
+      };
+      xhr.onerror = function () { reject(new Error('red')); };
+      xhr.ontimeout = xhr.onerror;
+      xhr.send(blob);
+    });
+  }
+
+  function esperar(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  async function subirArchivo(file, tipo, onProgress) {
+    var url = await pedirUrl(file, tipo);
+    var offset = 0;
+    var intentos = 0;
+    while (offset < file.size) {
+      var fin = Math.min(offset + CHUNK, file.size);
+      try {
+        var r = await putChunk(url, file.slice(offset, fin), offset, file.size, onProgress);
+        offset = fin;
+        intentos = 0;
+        onProgress(offset);
+        if (r === 'fin') return;
+      } catch (err) {
+        intentos++;
+        if (intentos > 4) throw err;
+        await esperar(1500 * intentos);
+      }
+    }
+  }
+
+  function fila(file) {
+    var li = document.createElement('li');
+    li.innerHTML = '<div class="lista__fila"><span class="lista__nombre"></span><span class="lista__estado">En espera</span></div><div class="barra"><span></span></div>';
+    li.querySelector('.lista__nombre').textContent = file.name;
+    lista.appendChild(li);
+    return li;
+  }
+
+  function setBloqueado(b) {
+    subiendo = b;
+    btn.setAttribute('aria-disabled', b ? 'true' : 'false');
+    input.disabled = b;
+  }
+
+  async function pedirPantalla() {
+    try { if (navigator.wakeLock) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+  }
+
+  input.addEventListener('change', async function () {
+    var archivos = Array.prototype.slice.call(input.files);
+    input.value = '';
+    if (!archivos.length || subiendo) return;
+    if (ENDPOINT.indexOf('http') !== 0) { mensaje.textContent = 'La subida aún no está lista.'; return; }
+
+    setBloqueado(true);
+    mensaje.textContent = 'Subiendo… mantén esta pantalla abierta hasta que termine.';
+    pedirPantalla();
+    var ok = 0, fallos = 0;
+
+    for (var i = 0; i < archivos.length; i++) {
+      var f = archivos[i];
+      var li = fila(f);
+      var estado = li.querySelector('.lista__estado');
+      var barra = li.querySelector('.barra > span');
+      var tipo = tipoDe(f);
+      if (!tipo) { li.className = 'error'; estado.textContent = 'Formato no válido'; fallos++; continue; }
+      estado.textContent = '0%';
+      try {
+        await subirArchivo(f, tipo, function (bytes) {
+          var pct = Math.min(100, Math.round(bytes / f.size * 100));
+          barra.style.width = pct + '%';
+          estado.textContent = pct + '%';
+        });
+        barra.style.width = '100%';
+        estado.textContent = 'Listo';
+        ok++;
+      } catch (err) {
+        li.className = 'error';
+        estado.textContent = 'No se pudo subir';
+        fallos++;
+      }
+    }
+
+    if (wakeLock) { try { wakeLock.release(); } catch (e) {} wakeLock = null; }
+    setBloqueado(false);
+    mensaje.textContent = fallos
+      ? ok + ' subido(s), ' + fallos + ' con error. Puedes volver a intentar con los que fallaron.'
+      : '¡Gracias! Tus ' + ok + ' archivo(s) ya llegaron a Vale y Jorge.';
+  });
+
+  window.addEventListener('beforeunload', function (e) {
+    if (subiendo) { e.preventDefault(); e.returnValue = ''; }
+  });
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vale &amp; Jorge — Sube tus fotos</title>
+<meta name="description" content="Comparte con Vale y Jorge las fotos y videos que tomaste en su matrimonio.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=WindSong&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --grad-cream: #efebde;
+    --grad-sage: #89906c;
+    --grad-dark: #394335;
+    --ink: #4b4636;
+    --cream: #f1ecdf;
+  }
+  * { box-sizing: border-box; }
+  html { overflow-x: hidden; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    font-family: 'Spectral', serif;
+    color: var(--grad-dark);
+    background: linear-gradient(to bottom, var(--grad-cream) 0%, var(--grad-cream) 30%, var(--grad-sage) 70%, var(--grad-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+  }
+  main { width: 100%; max-width: 440px; }
+  .logo { width: min(280px, 72vw); height: auto; display: block; margin: 0 auto 36px; }
+  h1 {
+    font-family: 'WindSong', cursive;
+    font-weight: 500;
+    font-size: clamp(34px, 9vw, 46px);
+    letter-spacing: 0.03em;
+    margin: 0 0 20px;
+  }
+  p { font-size: clamp(16px, 4.2vw, 18px); line-height: 1.6; margin: 0 0 14px; }
+  .btn {
+    display: inline-block;
+    margin: 22px 0 28px;
+    font-family: 'Spectral', serif;
+    font-size: clamp(14px, 3.6vw, 16px);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: var(--cream);
+    background: var(--ink);
+    padding: 18px clamp(28px, 7vw, 40px);
+    border-radius: 999px;
+  }
+  .note { font-size: 14px; font-style: italic; color: var(--cream); opacity: 0.9; margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="/assets/vj-logo-fecha.svg" alt="Vale &amp; Jorge">
+  <h1>Gracias por celebrar con nosotros</h1>
+  <p>Si tomaste fotos o videos del matrimonio, nos encantaría tenerlos. Súbelos aquí y llegarán directo a nosotros.</p>
+  <a class="btn" href="https://drive.google.com/drive/folders/1suzOyYF0R5edQG1T4gZUS-98JVmAGWFr?usp=sharing" target="_blank" rel="noopener">SUBIR FOTOS Y VIDEOS</a>
+  <p class="note">Toca el botón, luego “Nuevo” o el signo + para elegir tus archivos desde la galería.</p>
+</main>
+</body>
+</html>
